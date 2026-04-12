@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio – Blog de Noticias{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <h1 class="display-5 fw-bold">Últimas noticias</h1>
+    <hr>
+  </div>
+</div>
+
+{% if noticias %}
+
+  {% for noticia in noticias %}
+    {% if forloop.first and noticia.destacada %}
+
+    {# --- Noticia destacada: card hero ancho completo --- #}
+    <div class="card noticia-hero shadow mb-4">
+      {% if noticia.imagen_destacada %}
+      <img src="{{ noticia.imagen_destacada.url }}" class="card-img-top card-img-hero" alt="{{ noticia.titulo }}">
+      {% endif %}
+      <div class="card-body">
+        {% if noticia.categoria %}
+        <a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-danger text-decoration-none mb-2">&#9733; {{ noticia.categoria.nombre }}</a>
+        {% endif %}
+        <span class="badge bg-warning text-dark mb-2 ms-1">Destacado</span>
+        <h2 class="card-title fw-bold">
+          <a href="{{ noticia.get_absolute_url }}" class="text-decoration-none text-dark stretched-link">
+            {{ noticia.titulo }}
+          </a>
+        </h2>
+        <p class="card-text text-muted">{{ noticia.cuerpo|striptags|truncatewords:40 }}</p>
+      </div>
+      <div class="card-footer text-muted d-flex justify-content-between small">
+        <span>Por <strong>{{ noticia.autor.get_full_name|default:noticia.autor.username }}</strong></span>
+        <span>{{ noticia.fecha_publicacion|date:"d/m/Y" }}</span>
+      </div>
+    </div>
+
+    {# Abrimos la grilla para el resto #}
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+
+    {% elif forloop.first %}
+
+    {# Sin destacada: abrimos la grilla normalmente #}
+    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+    <div class="col">
+      <div class="card h-100 shadow-sm noticia-card">
+        {% if noticia.imagen_destacada %}
+        <img src="{{ noticia.imagen_destacada.url }}" class="card-img-top card-img-noticia" alt="{{ noticia.titulo }}">
+        {% endif %}
+        <div class="card-body">
+          {% if noticia.categoria %}
+          <a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-dark text-decoration-none mb-1">{{ noticia.categoria.nombre }}</a>
+          {% endif %}
+          <h5 class="card-title">
+            <a href="{{ noticia.get_absolute_url }}" class="text-decoration-none text-dark stretched-link">
+              {{ noticia.titulo }}
+            </a>
+          </h5>
+          <p class="card-text text-muted">{{ noticia.cuerpo|striptags|truncatewords:30 }}</p>
+        </div>
+        <div class="card-footer text-muted d-flex justify-content-between small">
+          <span>Por <strong>{{ noticia.autor.get_full_name|default:noticia.autor.username }}</strong></span>
+          <span>{{ noticia.fecha_publicacion|date:"d/m/Y" }} &middot; {{ noticia.tiempo_lectura }} min</span>
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+
+    {# Resto de noticias: cards normales dentro de la grilla #}
+    <div class="col">
+      <div class="card h-100 shadow-sm noticia-card">
+        {% if noticia.imagen_destacada %}
+        <img src="{{ noticia.imagen_destacada.url }}" class="card-img-top card-img-noticia" alt="{{ noticia.titulo }}">
+        {% endif %}
+        <div class="card-body">
+          {% if noticia.categoria %}
+          <a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-dark text-decoration-none mb-1">{{ noticia.categoria.nombre }}</a>
+          {% endif %}
+          <h5 class="card-title">
+            <a href="{{ noticia.get_absolute_url }}" class="text-decoration-none text-dark stretched-link">
+              {{ noticia.titulo }}
+            </a>
+          </h5>
+          <p class="card-text text-muted">{{ noticia.cuerpo|striptags|truncatewords:30 }}</p>
+        </div>
+        <div class="card-footer text-muted d-flex justify-content-between small">
+          <span>Por <strong>{{ noticia.autor.get_full_name|default:noticia.autor.username }}</strong></span>
+          <span>{{ noticia.fecha_publicacion|date:"d/m/Y" }} &middot; {{ noticia.tiempo_lectura }} min</span>
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+  {% endfor %}
+
+  {# Cerramos la grilla siempre #}
+  </div>
+
+{% else %}
+  <div class="alert alert-info">No hay noticias publicadas todavía.</div>
+{% endif %}
+
+<div class="text-center mt-3">
+  <a href="{% url 'lista_noticias' %}" class="btn btn-dark btn-lg">Ver todas las noticias &rarr;</a>
+</div>
+{% endblock %}

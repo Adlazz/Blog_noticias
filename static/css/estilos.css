@@ -1,0 +1,133 @@
+/* =============================================
+   Blog de Noticias — Estilos personalizados
+   ============================================= */
+
+/* Navbar */
+.navbar-brand {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+/* Cards de noticias (home) */
+.noticia-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.noticia-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.card-img-noticia {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Card hero (noticia destacada en home) */
+.noticia-hero {
+  border: none;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-img-hero {
+  height: 380px;
+  object-fit: cover;
+}
+
+/* Imagen destacada en detalle */
+.noticia-imagen-destacada {
+  max-height: 450px;
+  object-fit: cover;
+}
+
+/* Lista de noticias */
+.noticia-list-item {
+  transition: background-color 0.15s ease;
+  border-left: 4px solid transparent;
+}
+
+.noticia-list-item:hover {
+  border-left-color: #212529;
+  background-color: #f8f9fa;
+}
+
+/* Miniatura en listado */
+.noticia-thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Cuerpo de noticia */
+.noticia-cuerpo {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* Tablas dentro del cuerpo de noticia */
+.noticia-cuerpo table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.97rem;
+}
+
+.noticia-cuerpo table th,
+.noticia-cuerpo table td {
+  border: 1px solid #dee2e6;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.noticia-cuerpo table th {
+  background-color: #212529;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.noticia-cuerpo table tr:nth-child(even) td {
+  background-color: #f8f9fa;
+}
+
+.noticia-cuerpo table tr:hover td {
+  background-color: #e9ecef;
+}
+
+/* Listas dentro del cuerpo de noticia */
+.noticia-cuerpo ul,
+.noticia-cuerpo ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.noticia-cuerpo li {
+  margin-bottom: 0.4rem;
+}
+
+/* Footer */
+footer {
+  font-size: 0.85rem;
+}
+
+/* Paginación */
+.pagination .page-link {
+  color: #212529;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #212529;
+  border-color: #212529;
+  color: #fff;
+}
+
+.pagination .page-link:hover {
+  background-color: #e9ecef;
+}

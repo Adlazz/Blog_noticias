@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Búsqueda: {{ query }} – Blog de Noticias{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <h1 class="display-5 fw-bold">
+      {% if query %}
+        Resultados para: <em>{{ query }}</em>
+      {% else %}
+        Buscador
+      {% endif %}
+    </h1>
+    <hr>
+  </div>
+</div>
+
+<form class="mb-4" method="get" action="{% url 'buscar' %}">
+  <div class="input-group">
+    <input type="search" name="q" class="form-control form-control-lg"
+           value="{{ query }}" placeholder="Ingresá un término de búsqueda...">
+    <button class="btn btn-dark" type="submit">Buscar</button>
+  </div>
+</form>
+
+{% if query %}
+  {% if noticias %}
+    <p class="text-muted mb-3">
+      {{ page_obj.paginator.count }} resultado{{ page_obj.paginator.count|pluralize:"s" }} encontrado{{ page_obj.paginator.count|pluralize:"s" }}.
+    </p>
+    <div class="list-group mb-4">
+      {% for noticia in noticias %}
+      <a href="{{ noticia.get_absolute_url }}" class="list-group-item list-group-item-action noticia-list-item">
+        <div class="d-flex w-100 justify-content-between align-items-start">
+          <div class="d-flex gap-3">
+            {% if noticia.imagen_destacada %}
+            <img src="{{ noticia.imagen_destacada.url }}" class="rounded noticia-thumb" alt="{{ noticia.titulo }}">
+            {% endif %}
+            <div>
+              {% if noticia.categoria %}<a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-dark text-decoration-none mb-1">{{ noticia.categoria.nombre }}</a>{% endif %}
+              <h5 class="mb-1">{{ noticia.titulo }}</h5>
+              <p class="mb-1 text-muted">{{ noticia.cuerpo|striptags|truncatewords:20 }}</p>
+            </div>
+          </div>
+          <small class="text-muted text-nowrap ms-3">{{ noticia.fecha_publicacion|date:"d/m/Y" }}</small>
+        </div>
+        <small class="text-muted">Por {{ noticia.autor.get_full_name|default:noticia.autor.username }}</small>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Paginación">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">&laquo; Anterior</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo; Anterior</span></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ num }}">{{ num }}</a></li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Siguiente &raquo;</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">Siguiente &raquo;</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+
+  {% else %}
+    <div class="alert alert-warning">
+      No se encontraron noticias para <strong>{{ query }}</strong>.
+    </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

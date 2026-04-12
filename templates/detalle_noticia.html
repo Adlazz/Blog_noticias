@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ noticia.titulo }} – Blog de Noticias{% endblock %}
+
+{% block meta %}
+<meta name="description" content="{{ noticia.meta_descripcion|default:noticia.cuerpo|striptags|truncatewords:25 }}">
+<meta property="og:title" content="{{ noticia.titulo }}">
+<meta property="og:description" content="{{ noticia.meta_descripcion|default:noticia.cuerpo|striptags|truncatewords:25 }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% if noticia.imagen_destacada %}
+<meta property="og:image" content="{{ request.build_absolute_uri }}{{ noticia.imagen_destacada.url }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<article class="row justify-content-center">
+  <div class="col-lg-8">
+
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'lista_noticias' %}">Noticias</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ noticia.titulo|truncatewords:6 }}</li>
+      </ol>
+    </nav>
+
+    {% if noticia.categoria %}
+    <a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-dark text-decoration-none mb-2 d-inline-block">{{ noticia.categoria.nombre }}</a>
+    {% endif %}
+    <h1 class="display-6 fw-bold mb-2">{{ noticia.titulo }}</h1>
+
+    <div class="text-muted mb-4 d-flex gap-3 small flex-wrap">
+      <span>Por <strong>{{ noticia.autor.get_full_name|default:noticia.autor.username }}</strong></span>
+      <span>Publicado el {{ noticia.fecha_publicacion|date:"d \d\e F \d\e Y" }}</span>
+      <span>&#128337; {{ noticia.tiempo_lectura }} min de lectura</span>
+    </div>
+
+    {% if noticia.imagen_destacada %}
+    <img src="{{ noticia.imagen_destacada.url }}"
+         class="img-fluid rounded mb-4 w-100 noticia-imagen-destacada"
+         alt="{{ noticia.titulo }}">
+    {% endif %}
+
+    <div class="noticia-cuerpo">
+      {{ noticia.cuerpo|safe }}
+    </div>
+
+    {# --- Botones para compartir --- #}
+    <hr class="mt-5">
+    <div class="mb-4">
+      <p class="fw-semibold mb-2">Compartir:</p>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="https://wa.me/?text={{ noticia.titulo|urlencode }}%20{{ request.build_absolute_uri|urlencode }}"
+           target="_blank" rel="noopener" class="btn btn-success btn-sm">
+          &#128241; WhatsApp
+        </a>
+        <a href="https://twitter.com/intent/tweet?text={{ noticia.titulo|urlencode }}&url={{ request.build_absolute_uri|urlencode }}"
+           target="_blank" rel="noopener" class="btn btn-dark btn-sm">
+          &#120143; Twitter / X
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri|urlencode }}"
+           target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+          in LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between mb-5">
+      <a href="{% url 'lista_noticias' %}" class="btn btn-outline-secondary">&larr; Volver al listado</a>
+      <a href="{% url 'noticias_por_fecha' noticia.fecha_publicacion.year noticia.fecha_publicacion.month %}"
+         class="btn btn-outline-dark">
+        Más noticias de {{ noticia.fecha_publicacion|date:"F Y" }}
+      </a>
+    </div>
+
+  </div>
+</article>
+
+{# --- Noticias relacionadas --- #}
+{% if relacionadas %}
+<section class="container mt-2 mb-5">
+  <h4 class="fw-bold mb-3">También te puede interesar</h4>
+  <div class="row row-cols-1 row-cols-md-3 g-3">
+    {% for rel in relacionadas %}
+    <div class="col">
+      <div class="card h-100 shadow-sm noticia-card">
+        {% if rel.imagen_destacada %}
+        <img src="{{ rel.imagen_destacada.url }}" class="card-img-top card-img-noticia" alt="{{ rel.titulo }}">
+        {% endif %}
+        <div class="card-body">
+          {% if rel.categoria %}<a href="{% url 'categoria' rel.categoria.slug %}" class="badge bg-dark text-decoration-none mb-1">{{ rel.categoria.nombre }}</a>{% endif %}
+          <h6 class="card-title">
+            <a href="{{ rel.get_absolute_url }}" class="text-decoration-none text-dark stretched-link">{{ rel.titulo }}</a>
+          </h6>
+        </div>
+        <div class="card-footer text-muted small d-flex justify-content-between">
+          <span>{{ rel.autor.get_full_name|default:rel.autor.username }}</span>
+          <span>{{ rel.fecha_publicacion|date:"d/m/Y" }}</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
