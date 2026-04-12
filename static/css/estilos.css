@@ -55,6 +55,10 @@
   background-color: #f8f9fa;
 }
 
+.noticia-titulo-link:hover {
+  text-decoration: underline !important;
+}
+
 /* Miniatura en listado */
 .noticia-thumb {
   width: 80px;

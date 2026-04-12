@@ -1,0 +1,11 @@
+# Normalizar saltos de línea a LF en el repo para todos los archivos de texto
+* text=auto eol=lf
+
+# Archivos binarios: sin conversión
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.sqlite3 binary

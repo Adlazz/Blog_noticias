@@ -64,21 +64,22 @@ document.getElementById('btn-filtrar').addEventListener('click', function(e) {
 {% if noticias %}
   <div class="list-group mb-4">
     {% for noticia in noticias %}
-    <a href="{{ noticia.get_absolute_url }}" class="list-group-item list-group-item-action noticia-list-item">
+    <div class="list-group-item noticia-list-item">
       <div class="d-flex w-100 justify-content-between align-items-start">
-        <div class="d-flex gap-3">
+        <div class="d-flex gap-3 flex-grow-1">
           {% if noticia.imagen_destacada %}
-          <img src="{{ noticia.imagen_destacada.url }}" class="rounded noticia-thumb" alt="{{ noticia.titulo }}">
+          <img src="{{ noticia.imagen_destacada.url }}" class="rounded noticia-thumb flex-shrink-0" alt="{{ noticia.titulo }}">
           {% endif %}
-          <div>
-            <h5 class="mb-1">{{ noticia.titulo }}</h5>
+          <div class="flex-grow-1">
+            {% if noticia.categoria %}<a href="{% url 'categoria' noticia.categoria.slug %}" class="badge bg-dark text-decoration-none mb-1 d-inline-block">{{ noticia.categoria.nombre }}</a>{% endif %}
+            <h5 class="mb-1"><a href="{{ noticia.get_absolute_url }}" class="text-dark text-decoration-none noticia-titulo-link">{{ noticia.titulo }}</a></h5>
             <p class="mb-1 text-muted">{{ noticia.cuerpo|striptags|truncatewords:20 }}</p>
           </div>
         </div>
         <small class="text-muted text-nowrap ms-3">{{ noticia.fecha_publicacion|date:"d/m/Y" }}</small>
       </div>
       <small class="text-muted">Por {{ noticia.autor.get_full_name|default:noticia.autor.username }}</small>
-    </a>
+    </div>
     {% endfor %}
   </div>
 
