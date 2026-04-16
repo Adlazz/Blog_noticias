@@ -21,9 +21,10 @@ Guía paso a paso para construir desde cero una aplicación web de blog de notic
 13. [Crear los templates](#13-crear-los-templates)
 14. [Estilos CSS](#14-estilos-css)
 15. [Crear superusuario y cargar datos](#15-crear-superusuario-y-cargar-datos)
-16. [Iniciar el servidor](#16-iniciar-el-servidor)
-17. [Estructura final del proyecto](#17-estructura-final-del-proyecto)
-18. [Referencia de URLs](#18-referencia-de-urls)
+16. [Gestión de usuarios y permisos](#16-gestión-de-usuarios-y-permisos)
+17. [Iniciar el servidor](#17-iniciar-el-servidor)
+18. [Estructura final del proyecto](#18-estructura-final-del-proyecto)
+19. [Referencia de URLs](#19-referencia-de-urls)
 
 ---
 
@@ -852,7 +853,107 @@ Django pedirá:
 
 ---
 
-## 16. Iniciar el servidor
+## 16. Gestión de usuarios y permisos
+
+Django tiene un sistema de permisos integrado. Cada modelo genera automáticamente 4 permisos: `add`, `change`, `delete` y `view`. El enfoque recomendado es crear un **Grupo** con los permisos necesarios y asignar usuarios a ese grupo, en lugar de configurar permisos uno por uno.
+
+### Tipos de usuario en Django
+
+| Tipo | `is_staff` | `is_superuser` | Acceso |
+|---|---|---|---|
+| **Superusuario** | ✅ | ✅ | Admin completo, sin restricciones |
+| **Staff / Redactor** | ✅ | ❌ | Accede al admin solo con los permisos que se le asignen |
+| **Usuario regular** | ❌ | ❌ | No accede al admin |
+
+> La clave es `is_staff = True`: sin esto, el usuario no puede ingresar a `/admin/` aunque tenga permisos asignados.
+
+---
+
+### Paso 1 — Crear el grupo "Redactores"
+
+Los grupos permiten asignar el mismo conjunto de permisos a varios usuarios a la vez. Si después necesitás cambiar los permisos del rol, lo cambiás en el grupo y afecta a todos los usuarios de ese grupo.
+
+1. Ir a `http://127.0.0.1:8000/admin/`
+2. En el menú lateral → **Autenticación y Autorización** → **Grupos**
+3. Click en **Añadir grupo**
+4. Nombre: `Redactores`
+5. En el panel de permisos disponibles, buscar `noticia` y seleccionar:
+   - `noticias | noticia | Can add noticia` ✅
+   - `noticias | noticia | Can change noticia` ✅
+   - `noticias | noticia | Can view noticia` ✅
+   - `noticias | noticia | Can delete noticia` ← opcional, solo si querés que puedan borrar
+6. También agregar permisos de categoría si deben poder crearlas:
+   - `noticias | categoría | Can add categoría` ✅
+   - `noticias | categoría | Can change categoría` ✅
+   - `noticias | categoría | Can view categoría` ✅
+7. Usar la flecha **→** para moverlos al panel de "Permisos elegidos"
+8. Click en **Guardar**
+
+---
+
+### Paso 2 — Crear un nuevo usuario
+
+1. En el admin → **Autenticación y Autorización** → **Usuarios**
+2. Click en **Añadir usuario**
+3. Completar **Nombre de usuario** y **Contraseña** → click en **Guardar y continuar editando**
+4. En la siguiente pantalla configurar:
+   - **Nombre** y **Apellidos** (opcionales, pero aparecen como autor en las noticias)
+   - **Dirección de correo electrónico** (opcional)
+   - En la sección **Permisos**:
+     - Tildar **"El usuario puede acceder al sitio de administración"** (`is_staff`) ← **obligatorio**
+     - NO tildar "Es superusuario"
+   - En la sección **Grupos**: seleccionar `Redactores` y moverlo con la flecha **→**
+5. Click en **Guardar**
+
+---
+
+### Paso 3 — Verificar el acceso
+
+El nuevo usuario debería poder:
+
+| Acción | ¿Puede? |
+|---|---|
+| Ingresar a `/admin/` | ✅ |
+| Ver listado de noticias | ✅ |
+| Crear noticias | ✅ |
+| Editar noticias | ✅ |
+| Eliminar noticias | Solo si se le dio ese permiso |
+| Ver/crear categorías | Solo si se le dio ese permiso |
+| Ver/crear usuarios | ❌ |
+| Cambiar configuración del sitio | ❌ |
+
+> El redactor solo ve en su admin las secciones para las que tiene permisos. No ve usuarios ni grupos.
+
+---
+
+### Resumen visual del sistema de permisos
+
+```
+Superusuario
+└── Acceso total a todo el admin
+
+Grupo: Redactores
+├── noticias | noticia | add
+├── noticias | noticia | change
+├── noticias | noticia | view
+└── noticias | categoría | view
+
+Usuario "juan" (is_staff=True)
+└── Grupos: [Redactores]
+    └── Hereda todos los permisos del grupo
+```
+
+---
+
+### Cambiar permisos de un usuario existente
+
+- **Para darle más permisos:** agregarlo a otro grupo, o asignarle permisos individuales desde su perfil en el admin en la sección "Permisos de usuario"
+- **Para quitarle el acceso temporalmente:** destildar `is_staff` en su perfil (sigue existiendo el usuario pero no puede entrar al admin)
+- **Para cambiar el rol de todos los redactores:** editar el grupo `Redactores` y los cambios se aplican automáticamente a todos sus miembros
+
+---
+
+## 17. Iniciar el servidor
 
 ```bash
 python manage.py runserver
@@ -873,7 +974,7 @@ Para detenerlo: `Ctrl + C`
 
 ---
 
-## 17. Estructura final del proyecto
+## 18. Estructura final del proyecto
 
 ```
 Blog_noticias/
@@ -916,7 +1017,7 @@ Blog_noticias/
 
 ---
 
-## 18. Referencia de URLs
+## 19. Referencia de URLs
 
 | URL | Vista | Descripción |
 |---|---|---|
