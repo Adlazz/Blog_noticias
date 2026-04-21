@@ -1,3 +1,7 @@
 django
 pillow
 python-slugify
+gunicorn
+psycopg2-binary
+whitenoise
+dj-database-url
