@@ -121,6 +121,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # para invalidar caché del navegador cuando cambia el contenido.
 # Requiere Django 5.x — usa STORAGES dict en lugar del deprecado STATICFILES_STORAGE.
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
