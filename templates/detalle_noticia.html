@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ noticia.titulo }} – Blog de Noticias{% endblock %}
+{% block title %}{{ noticia.titulo }} – RadAr Info{% endblock %}
 
 {% block meta %}
 <meta name="description" content="{{ noticia.meta_descripcion|default:noticia.cuerpo|striptags|truncatewords:25 }}">
