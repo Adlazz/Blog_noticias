@@ -4,7 +4,7 @@ from .models import Noticia
 
 
 class UltimasNoticiasFeed(Feed):
-    title = 'Blog de Noticias'
+    title = 'RadAr Info'
     link = '/noticias/'
     description = 'Últimas noticias publicadas.'
 
