@@ -22,7 +22,7 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # Lee hosts permitidos desde env var (separados por coma) + siempre permite Railway.
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-ALLOWED_HOSTS += ['.railway.app']
+ALLOWED_HOSTS += ['.railway.app', 'radarinfo.ar', 'www.radarinfo.ar']
 
 
 # ─── Aplicaciones ───────────────────────────────────────────────────────────
