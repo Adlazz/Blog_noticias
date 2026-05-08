@@ -2,6 +2,37 @@
    Blog de Noticias — Estilos personalizados
    ============================================= */
 
+/* Tipografía global */
+:root {
+  --bs-body-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --bs-body-font-weight: 400;
+  --bs-body-line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+strong, b {
+  font-weight: 600;
+}
+
+.meta, .byline, time, .category {
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+}
+
+.lead, .article-lead {
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--bs-secondary-color);
+}
+
 /* Navbar */
 .navbar-brand {
   font-size: 1.4rem;
@@ -77,9 +108,12 @@
 /* Tablas dentro del cuerpo de noticia */
 .noticia-cuerpo table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.97rem;
+  display: block;
+  overflow-x: auto;
 }
 
 .noticia-cuerpo table th,
