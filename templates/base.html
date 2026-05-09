@@ -30,6 +30,9 @@
             <a class="nav-link" href="{% url 'lista_noticias' %}">Todas las noticias</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'acerca_de' %}">Acerca de</a>
+          </li>
+          <li class="nav-item">
             <form class="d-flex ms-2" method="get" action="{% url 'buscar' %}">
               <input class="form-control form-control-sm me-1" type="search" name="q" placeholder="Buscar..." aria-label="Buscar">
               <button class="btn btn-outline-light btn-sm" type="submit">&#128269;</button>

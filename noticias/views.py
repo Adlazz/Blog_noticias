@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.db.models import Q
 from .models import Noticia, Categoria
 
@@ -113,9 +113,14 @@ class BuscadorView(ListView):
         return context
 
 
+class AcercaDeView(TemplateView):
+    template_name = 'acerca_de.html'
+
+
 home = HomeView.as_view()
 lista_noticias = ListaNoticiasView.as_view()
 detalle_noticia = DetalleNoticiaView.as_view()
 categoria = CategoriaView.as_view()
 noticias_por_fecha = NoticiasPorFechaView.as_view()
 buscar = BuscadorView.as_view()
+acerca_de = AcercaDeView.as_view()
