@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}RadAr Info{% endblock %}</title>
+  <title>{% block title %}radarinfo{% endblock %}</title>
   {% block meta %}{% endblock %}
-  <link rel="alternate" type="application/rss+xml" title="RadAr Info RSS" href="{% url 'feed' %}">
+  <link rel="alternate" type="application/rss+xml" title="radarinfo RSS" href="{% url 'feed' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="{% url 'home' %}">RadAr Info</a>
+      <a class="navbar-brand fw-bold" href="{% url 'home' %}">radarinfo</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -63,7 +63,7 @@
 
   <footer class="bg-dark text-light text-center py-3 mt-5">
     <div class="container">
-      <small>&copy; {% now "Y" %} RadAr Info. Todos los derechos reservados.</small>
+      <small>&copy; {% now "Y" %} radarinfo. Todos los derechos reservados.</small>
     </div>
   </footer>
 
